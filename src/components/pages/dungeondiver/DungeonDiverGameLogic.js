@@ -1,13 +1,90 @@
-export function PlayerMovement(ctx){
+export function GameLogic(ctx){
     
     movementFrames()
     idleDirection()
     diveTimer(ctx)
-    playerModel.update(ctx)
+    swimFrames()
+    attack()
+    // healthChecker(playerModel)
+    playerModel.image.onload = ()=>{
+        ctx.fillStyle = 'gray'
+        ctx.fillRect(0, 0, 700, 520)
+        playerModel.update(ctx)
+    }
 
 }
 
+class Entity{
+    constructor({position, width, height, health, damage, imageSrc, scale = 1, framesMax, offset, sprites}){
+        this.position = position
+        this.image = new Image()
+        this.image.src = imageSrc
+        this.scale = scale
+        this.framesMax = framesMax
+        this.framesCurrent = this.framesCurrent
+        this.framesElaped = 0
+        this.framesHold = 9
+        this.sprites = sprites
+        for(const obj in this.sprites){
+            sprites[obj].image = new Image()
+            sprites[obj].image.src = sprites[obj].imageSrc
+        }
+        this.width = width
+        this.height = height
+        this.alive = false
+        this.health = health
+        this.damage = damage
+        this.offset = offset
+        this.notSafe = true
+        this.direction = 'left'
+        this.hurt = false
+        this.dying = false
+        this.waiting = false
+        this.attacking = false
+    }
 
+    draw(ctx){
+        ctx.drawImage(
+            this.image, 
+            this.framesCurrent * (this.image.width / this.framesMax),
+            0,
+            this.image.width / this.framesMax,
+            this.image.height,
+            
+
+            this.position.x - this.offset.x, 
+            this.position.y - this.offset.y, 
+            (this.image.width / this.framesMax) * this.scale,
+            this.image.height * this.scale
+            )
+        // ctx.fillStyle = 'red'
+        // ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+    update(ctx){
+        this.draw(ctx)
+        this.framesElaped++
+        if(this.framesElaped % this.framesHold === 0){  
+            if(this.framesCurrent < this.framesMax - 1){
+                this.framesCurrent++
+            } else {
+                this.framesCurrent = 0
+            }
+        }
+        if(this.position.x < 30){
+            this.position.x = 30
+        } else if(this.position.x + this.width > 670){
+            this.position.x = 670 - this.width
+        } 
+
+        if(this.position.y < 60){
+            this.position.y = 60
+        } else if (this.position.y  + this.height > 450){
+            this.position.y = 450 - this.height    
+        } 
+    }
+
+    
+}
 
 class Player {
     constructor({position, width, height, speed, health, imageSrc, scale = 1, offset, sprites}){
@@ -66,7 +143,8 @@ class Player {
     }
 
     update(ctx){
-        this.draw(ctx)
+            this.draw(ctx)
+        
         if(this.position.x < 30){
             this.speed.x = 0
             this.position.x = 30
@@ -251,20 +329,21 @@ const keys = {
 let hurt = false
 let dying = false
 
-let runFramesElaped = 0
+let runFramesElaped = 10
 let runCurrentFrame = 0
 let runFramesMax = 6
 let runFramesHold = 7
 
 
-let idleframesElaped = 0
+let idleframesElaped = 10
 let idleCurrentFrame = 0
-let idlePrevFrame = 0
+
 let idleframesMax = 5
 let idleframesHold = 10
 const movementFrames = ()=>{
     if(!attacking && !dying && !hurt){
             runFramesElaped++
+            // console.log(runFramesElaped % runFramesHold)
             if(runFramesElaped % runFramesHold === 0){  
                 if(runCurrentFrame < runFramesMax - 1){
                     runCurrentFrame++
@@ -272,15 +351,6 @@ const movementFrames = ()=>{
                     runCurrentFrame = 0
                 }
             }
-            idleframesElaped++
-            if(idleframesElaped % idleframesHold === 0){  
-                if(idleCurrentFrame < idleframesMax - 1){
-                    idleCurrentFrame++
-                } else {
-                    idleCurrentFrame = 0
-                }
-            }
-        
 
             playerModel.speed.x = 0
             playerModel.speed.y = 0
@@ -428,9 +498,10 @@ const movementFrames = ()=>{
 const idleDirection = () => {
     if(!moving && !attacking && !swimming && !dying && !hurt){
         idleframesElaped++
+        // console.log(idleframesElaped % idleframesHold)
         if(idleframesElaped % idleframesHold === 0){  
             if(idleCurrentFrame < idleframesMax - 1){
-                idlePrevFrame = idleCurrentFrame
+                // console.log(idleCurrentFrame)
                 idleCurrentFrame++
             
             } else {
@@ -466,8 +537,56 @@ const idleDirection = () => {
         }
     }
 }
+
+let attFramesElaped = 0
+let attCurrentFrame = 0
+let attFramesMax = 7
+let attFramesHold = 6
+
+const attack= () => {
+    if(attacking && !swimming && !dying && !hurt){
+        attFramesElaped++
+            if(attFramesElaped % attFramesHold === 0){  
+                if(attCurrentFrame < attFramesMax - 1){
+                    attCurrentFrame++
+                    playerModel.speed.x = 0
+                    playerModel.speed.y = 0
+                } else {
+                    attCurrentFrame = 0
+                    swimFramesElaped = 0
+                    attacking = false
+            }
+        }
+    if (lastKey == 'w'){
+        playerModel.width = playerModel.sprites.attUp.width
+        playerModel.height = playerModel.sprites.attUp.height
+        playerModel.offset.x = playerModel.sprites.attUp.offset.x
+        playerModel.offset.y = playerModel.sprites.attUp.offset.y
+        playerModel.image.src = `/dungeondiversprites/adventurer/attUp/golem-attack-t-0${attCurrentFrame}.png`
+    } else if(lastKey == 'a'){
+        playerModel.width = playerModel.sprites.attLeft.width
+        playerModel.height = playerModel.sprites.attLeft.height
+        playerModel.offset.x = playerModel.sprites.attLeft.offset.x
+        playerModel.offset.y = playerModel.sprites.attLeft.offset.y
+        playerModel.image.src =  `/dungeondiversprites/adventurer/attLeft/golem-attack-l-0${attCurrentFrame}.png`
+    } else if(lastKey == 's'){
+        playerModel.width = playerModel.sprites.attDown.width
+        playerModel.height = playerModel.sprites.attDown.height
+        playerModel.offset.x = playerModel.sprites.attDown.offset.x
+        playerModel.offset.y = playerModel.sprites.attDown.offset.y
+        playerModel.image.src = `/dungeondiversprites/adventurer/attDown/golem-attack-d-0${attCurrentFrame}.png`
+    } else if(lastKey == 'd'){
+        playerModel.width = playerModel.sprites.attRight.width
+        playerModel.height = playerModel.sprites.attRight.height
+        playerModel.offset.x = playerModel.sprites.attRight.offset.x
+        playerModel.offset.y = playerModel.sprites.attRight.offset.y
+        playerModel.image.src = `/dungeondiversprites/adventurer/attRight/golem-attack-r-0${attCurrentFrame}.png`
+    }    
+  }
+}
+
 let swimming = false
-let swimFramesElaped = 0
+let swimFramesElaped = 15
 let swimCurrentFrame = 0
 let swimFramesMax = 13
 let swimFramesHold = 15
@@ -534,40 +653,126 @@ const swimFrames = () =>{
         playerModel.height = playerModel.sprites.swimLeft.height
         playerModel.offset.x = playerModel.sprites.swimUnD.offset.x
         playerModel.offset.y = playerModel.sprites.swimUnD.offset.y
-        playerModel.image.src = `/dungeondiversprites/playerModel/swim/swimD/golem-swim-d-0${swimCurrentFrame}.png`
+        playerModel.image.src = `/dungeondiversprites/adventurer/swim/swimD/golem-swim-d-0${swimCurrentFrame}.png`
     } else if (keys.d.pressed ||  lastKey === 'd'){
         playerModel.width = playerModel.sprites.swimRight.width
         playerModel.height = playerModel.sprites.swimRight.height
         playerModel.offset.x = playerModel.sprites.swimRight.offset.x
         playerModel.offset.y = playerModel.sprites.swimRight.offset.y
-        // playerModel.image.src = `./images/playerModel/swim/swimR/golem-swim-r-0${swimCurrentFrame}.png`
+        playerModel.image.src = `/dungeondiversprites/adventurer/swim/swimR/golem-swim-r-0${swimCurrentFrame}.png`
     } else if (keys.d.pressed ||  lastKey === 'd'){
         playerModel.width = playerModel.sprites.swimRight.width
         playerModel.height = playerModel.sprites.swimRight.height
         playerModel.offset.x = playerModel.sprites.swimRight.offset.x
         playerModel.offset.y = playerModel.sprites.swimRight.offset.y
-        // playerModel.image.src = `./images/playerModel/swim/swimR/golem-swim-r-0${swimCurrentFrame}.png`
+        playerModel.image.src = `/dungeondiversprites/adventurer/swim/swimR/golem-swim-r-0${swimCurrentFrame}.png`
     } else if(keys.a.pressed ||  lastKey === 'a'){
         playerModel.width = playerModel.sprites.swimLeft.width
         playerModel.height = playerModel.sprites.swimLeft.height
         playerModel.offset.x = playerModel.sprites.swimLeft.offset.x
         playerModel.offset.y = playerModel.sprites.swimLeft.offset.y
-        // playerModel.image.src = `./images/playerModel/swim/swimL/golem-swim-l-0${swimCurrentFrame}.png`
+        playerModel.image.src = `/dungeondiversprites/adventurer/swim/swimL/golem-swim-l-0${swimCurrentFrame}.png`
     } else if(keys.w.pressed ||  lastKey === 'w'){
         playerModel.width = playerModel.sprites.swimLeft.width
         playerModel.height = playerModel.sprites.swimLeft.height
         playerModel.offset.x = playerModel.sprites.swimUnD.offset.x
         playerModel.offset.y = playerModel.sprites.swimUnD.offset.y
-        // playerModel.image.src = `./images/playerModel/swim/swimU/golem-swim-u-0${swimCurrentFrame}.png`
+        playerModel.image.src = `/dungeondiversprites/adventurer/swim/swimU/golem-swim-u-0${swimCurrentFrame}.png`
     } else if(keys.s.pressed ||  lastKey === 's'){
         playerModel.width = playerModel.sprites.swimLeft.width
         playerModel.height = playerModel.sprites.swimLeft.height
         playerModel.offset.x = playerModel.sprites.swimUnD.offset.x
         playerModel.offset.y = playerModel.sprites.swimUnD.offset.y
-        // playerModel.image.src = `./images/playerModel/swim/swimD/golem-swim-d-0${swimCurrentFrame}.png`
+        playerModel.image.src = `/dungeondiversprites/adventurer/swim/swimD/golem-swim-d-0${swimCurrentFrame}.png`
     } 
   }
 }
+// const healthChecker = (player) =>{
+//     // console.log(player.health)
+//     if(player.health == 20){
+//         health.style.width = '100%'
+//         health.style.backgroundColor = 'green'
+//     } else if(player.health == 19){
+//         health.style.width = '95%'
+//         health.style.backgroundColor = 'green'
+//     } else if(player.health == 18){
+//         health.style.width = '90%'
+//         health.style.backgroundColor = 'green'
+//     } else if(player.health == 17){
+//         health.style.width = '85%'
+//         health.style.backgroundColor = 'green'
+//     } else if(player.health == 16){
+//         health.style.width = '80%'
+//         health.style.backgroundColor = 'green'
+//     } else if(player.health == 15){
+//         health.style.width = '75%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 14){
+//         health.style.width = '70%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 13){
+//         health.style.width = '65%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 12){
+//         health.style.width = '60%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 11){
+//         health.style.width = '55%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 10){
+//         health.style.width = '50%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 9){
+//         health.style.width = '45%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 8){
+//         health.style.width = '40%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 7){
+//         health.style.width = '35%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 6){
+//         health.style.width = '30%'
+//         health.style.backgroundColor = 'orange'
+//     } else if(player.health == 5){
+//         health.style.width = '25%'
+//         health.style.backgroundColor = 'red'
+//     } else if(player.health == 4){
+//         health.style.width = '20%'
+//         health.style.backgroundColor = 'red'
+//     } else if(player.health == 3){
+//         health.style.width = '15%'
+//         health.style.backgroundColor = 'red'
+//     } else if(player.health == 2){
+//         health.style.width = '10%'
+//         health.style.backgroundColor = 'red'
+//     } else if(player.health == 1) {
+//         health.style.width = '5%'
+//         health.style.backgroundColor = 'red'
+//     } else if (player.health <= 0){
+//         health.style.width = '0%'
+//         if(dying){
+//             dyingFramesElaped++
+//             if(dyingFramesElaped % dyingFramesHold === 0){  
+//                 if(dyingCurrentFrame < dyingFramesMax - 1){
+//                     dyingCurrentFrame++
+//                 } else {
+//                     dyingFramesElaped = 0
+//                     dyingCurrentFrame = 0
+//                     gameLost = true 
+//                     player.alive = false
+//                 }
+//             }
+//         }
+//         playerModel.speed.x = 0
+//         playerModel.speed.y = 0
+//         playerModel.width = playerModel.sprites.swimLeft.width
+//         playerModel.height = playerModel.sprites.swimLeft.height
+//         playerModel.offset.x = playerModel.sprites.swimUnD.offset.x
+//         playerModel.offset.y = playerModel.sprites.swimUnD.offset.y
+//         playerModel.image.src = `/dungeondiversprites/adventurer/dying/golem-death-d-0${dyingCurrentFrame}.png`
+//     }   
+// }
 const lastKeyPressed = ()=>{
     if(!attacking){
     if(keys.a.pressed){
