@@ -1,5 +1,5 @@
 export function GameLogic(ctx){
-    
+    gameState(ctx)
     movementFrames()
     idleDirection()
     diveTimer(ctx)
@@ -179,11 +179,11 @@ class Player {
     }
     
     visualHitBox(){
-        // if(this.isAttacking === true){
+        // if(this.isAttacking ==== true){
         //     ctx.fillStyle = 'black'
-        //     if(lastKey === 'w'){  
+        //     if(lastKey ==== 'w'){  
         //         ctx.fillRect(this.attackBox.up.position.x, this.attackBox.up.position.y -25, this.attackBox.up.width, this.attackBox.up.height)
-        //     } else if (lastKey === 'a') {
+        //     } else if (lastKey ==== 'a') {
         //         ctx.fillRect(this.attackBox.left.position.x - 30, this.attackBox.left.position.y, this.attackBox.left.width, this.attackBox.left.height)
         //     } else if (lastKey === 's') {
         //         ctx.fillRect(this.attackBox.down.position.x, this.attackBox.down.position.y+55, this.attackBox.down.width, this.attackBox.down.height)
@@ -773,6 +773,1391 @@ const swimFrames = () =>{
 //         playerModel.image.src = `/dungeondiversprites/adventurer/dying/golem-death-d-0${dyingCurrentFrame}.png`
 //     }   
 // }
+const survivorRoomOne = new Entity({
+    position: {x: 600, y: 250},
+    width: 28,
+    height: 40,
+    speed: {x: 0, y: 0},
+    health: 3,
+    imageSrc: '/dungeondiversprites/entities/survivor.png',
+    scale: 1.5,
+    framesMax: 4,
+    offset: {x: 9, y: 9},
+    sprites: {
+        idle: {
+            imageSrc: '/dungeondiversprites/entities/survivor.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 22, y:10}
+        }
+    }
+})
+
+const spikeA = new Entity({
+    position: {x: 650, y: 80},
+    width: 22,
+    height: 20,
+    speed: {x: 0, y: 0},
+    imageSrc: '/dungeondiversprites/adventurer/spike/spike-u.png',
+    scale: .15,
+    framesMax: 1,
+    offset: {x: 2, y: 1}
+    
+})
+const spikeB = new Entity({
+    position: {x: 360, y: 220},
+    width: 22,
+    height: 20,
+    speed: {x: 0, y: 0},
+    imageSrc: '/dungeondiversprites/adventurer/spike/spike-u.png',
+    scale: .15,
+    framesMax: 1,
+    offset: {x: 2, y: 1}
+})
+const spikeC = new Entity({
+    position: {x: 620, y: 420},
+    width: 22,
+    height: 20,
+    speed: {x: 0, y: 0},
+    imageSrc: '/dungeondiversprites/adventurer/spike/spike-u.png',
+    scale: .15,
+    framesMax: 1,
+    offset: {x: 2, y: 1}
+})
+
+
+const key = new Entity({
+    position: {x: 200, y: 224},
+    width: 28,
+    height: 28,
+    speed: {x: 0, y: 0},
+    health: 3,
+    imageSrc: '/dungeondiversprites/entities/key.png',
+    scale: .05,
+    framesMax: 1,
+    offset: {x: 1, y: 0}
+})
+const door = new Entity({
+    position: {x: 666, y: 200},
+    width: 10,
+    height: 65,
+    speed: {x: 0, y: 0},
+    imageSrc: '/dungeondiversprites/entities/door.png',
+    scale: 1,
+    framesMax: 1,
+    offset: {x: 22, y: 15},
+    sprites: {openDoor: {
+        imageSrc: '/dungeondiversprites/entities/door2.png',
+        offset: {x: 18, y: 15},
+        scale: 1.25
+    },
+    door:{
+        imageSrc: '/dungeondiversprites/entities/door.png',
+        offset: {x: 22, y: 15},
+        scale: 1
+    }
+
+}
+})
+const chest = new Entity({
+    position: {x: 600, y: 70},
+    width: 50,
+    height: 40,
+    speed: {x: 0, y: 0},
+    health: 3,
+    imageSrc: '/dungeondiversprites/entities/chest.png',
+    scale: 1,
+    framesMax: 1,
+    offset: {x: 48, y: 46},
+    sprites:{open:{imageSrc: '/dungeondiversprites/entities/openChest.png'}}
+})
+
+
+const enemyA = new Entity({
+    position:{x: 650, y: 400},
+    width: 25, height: 40,
+    speed: {x: 0, y: 0},
+    health: 5,
+    damage: 4,
+    imageSrc: '', 
+    scale: 1, 
+    framesMax: 8, 
+    offset: {x: 0, y: 0},
+    sprites: {
+        goblinLeft: {
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinL.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinRight:{    
+                imageSrc: '/dungeondiversprites/entities/goblin/goblinR.png',
+                framesMax: 6,
+                framesHold: 7,
+                offset: {x: 5, y:11},
+                width: 25,
+                height: 38
+        },
+        goblinHurtLeft:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinHurtL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinHurtRight:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinHurtR.png',
+            framesMax: 4,
+                framesHold: 7,
+                offset: {x: 5, y:11},
+                width: 25,
+                height: 38
+        },
+        goblinDeathLeft:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinDeathL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinDeathRight:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinDeathR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 5, y:11},
+            width: 25,
+            height: 38
+        },
+        houndLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndL.png',
+            framesMax: 6,
+            framesHold: 5,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33,
+        },
+        houndRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndR.png',
+            framesMax: 6,
+            framesHold: 5,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+        },
+        houndHurtLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndHurtL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndHurtRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndHurtR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+        },
+        houndDeathLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndDyingL.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndDeathRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndDyingR.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+        },
+        houndAttackLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndAttackL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndAttackRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndAttackR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+        },
+    }
+})
+const enemyB = new Entity({
+    position:{x: 410, y: 300},
+    width: 25, height: 40,
+    speed: {x: 0, y: 0},
+    health: 5,
+    damage: 4,
+    imageSrc: '', 
+    scale: 1, 
+    framesMax: 7, 
+    offset: {x: 0, y: 0},
+    sprites: {
+        goblinLeft: {
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinL.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinRight:{    
+                imageSrc: '/dungeondiversprites/entities/goblin/goblinR.png',
+                framesMax: 6,
+                framesHold: 7,
+                offset: {x: 5, y:11},
+                width: 25,
+                height: 38
+        },
+        goblinHurtLeft:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinHurtL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinHurtRight:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinHurtR.png',
+            framesMax: 4,
+                framesHold: 7,
+                offset: {x: 5, y:11},
+                width: 25,
+                height: 38
+        },
+        goblinDeathLeft:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinDeathL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinDeathRight:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinDeathR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 5, y:11},
+            width: 25,
+            height: 38
+        },
+        houndLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndL.png',
+            framesMax: 6,
+            framesHold: 5,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndR.png',
+            framesMax: 6,
+            framesHold: 5,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+        },
+        houndHurtLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndHurtL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndHurtRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndHurtR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+        houndDeathLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndDyingL.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndDeathRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndDyingR.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+        houndAttackLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndAttackL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndAttackRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndAttackR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+
+    }
+})
+const enemyC = new Entity({
+    position:{x: 400, y: 400},
+    width: 25, height: 40,
+    speed: {x: 0, y: 0},
+    health: 4,
+    damage: 4,
+    imageSrc: '', 
+    scale: 1, 
+    framesMax: 7, 
+    offset: {x: 0, y: 0},
+    sprites: {
+        goblinLeft: {
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinL.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinRight:{    
+                imageSrc: '/dungeondiversprites/entities/goblin/goblinR.png',
+                framesMax: 6,
+                framesHold: 7,
+                offset: {x: 5, y:11},
+                width: 25,
+                height: 38
+        },
+        goblinHurtLeft:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinHurtL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinHurtRight:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinHurtR.png',
+            framesMax: 4,
+                framesHold: 7,
+                offset: {x: 5, y:11},
+                width: 25,
+                height: 38
+        },
+        goblinDeathLeft:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinDeathL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinDeathRight:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinDeathR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 5, y:11},
+            width: 25,
+            height: 38
+        },
+        houndLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndL.png',
+            framesMax: 6,
+            framesHold: 5,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndR.png',
+            framesMax: 6,
+            framesHold: 5,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+        },
+        houndHurtLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndHurtL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndHurtRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndHurtR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+        houndDeathLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndDyingL.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndDeathRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndDyingR.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+        houndAttackLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndAttackL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndAttackRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndAttackR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+
+    }
+})
+const enemyD = new Entity({
+    position:{x: 500, y: 100},
+    width: 25, height: 40,
+    speed: {x: 0, y: 0},
+    health: 5,
+    damage: 4,
+    imageSrc: '', 
+    scale: 1, 
+    framesMax: 8, 
+    offset: {x: 0, y: 0},
+    sprites: {
+        goblinLeft: {
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinL.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinRight:{    
+                imageSrc: '/dungeondiversprites/entities/goblin/goblinR.png',
+                framesMax: 6,
+                framesHold: 7,
+                offset: {x: 5, y:11},
+                width: 25,
+                height: 38
+        },
+        goblinHurtLeft:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinHurtL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinHurtRight:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinHurtR.png',
+            framesMax: 4,
+                framesHold: 7,
+                offset: {x: 5, y:11},
+                width: 25,
+                height: 38
+        },
+        goblinDeathLeft:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinDeathL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 20, y:11},
+            width: 25,
+            height: 38
+        },
+        goblinDeathRight:{
+            imageSrc: '/dungeondiversprites/entities/goblin/goblinDeathR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 5, y:11},
+            width: 25,
+            height: 38
+        },
+        houndLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndL.png',
+            framesMax: 6,
+            framesHold: 5,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndR.png',
+            framesMax: 6,
+            framesHold: 5,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+        },
+        houndHurtLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndHurtL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndHurtRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndHurtR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+        houndDeathLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndDyingL.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndDeathRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndDyingR.png',
+            framesMax: 6,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+        houndAttackLeft: {
+            imageSrc: '/dungeondiversprites/entities/hound/houndAttackL.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 10, y:16},
+            width: 36,
+            height: 33
+        },
+        houndAttackRight:{    
+            imageSrc: '/dungeondiversprites/entities/hound/houndAttackR.png',
+            framesMax: 4,
+            framesHold: 7,
+            offset: {x: 4, y:16},
+            width: 36,
+            height: 33
+    },
+
+    }
+})
+const reaper = new Entity({
+    position:{x: 100, y: 240},
+    width: 20, height: 20,
+    speed: {x: 0, y: 0},
+    health: 20,
+    damage: 3,
+    imageSrc: '', 
+    scale: .7, 
+    framesMax: 1, 
+    offset: {x: 12, y: 2},
+    sprites: {
+            reaperLeft: {
+                imageSrc: '/dungeondiversprites/entities/reaper/reaperRunningLeft.png',
+                framesMax: 8,
+                framesHold: 7,
+                offset: {x: 16, y:10},
+                width: 20,
+                height: 30
+            },
+            reaperRight:{    
+                imageSrc: '/dungeondiversprites/entities/reaper/reaperRunningRight.png',
+                framesMax: 8,
+                framesHold: 7,
+                offset: {x: 14, y:10},
+                width: 20,
+                height: 30
+            },
+            reaperIdle:{
+                imageSrc: '/dungeondiversprites/entities/reaper/reaperIdle.png',
+                framesMax: 5,
+                framesHold: 7,
+                offset: {x: 14, y:10},
+                width: 20,
+                height: 30
+            },
+            reaperIdleLeft:{
+                imageSrc: '/dungeondiversprites/entities/reaper/reaperIdleLeft.png',
+                framesMax: 5,
+                framesHold: 7,
+                offset: {x: 16, y:10},
+                width: 20,
+                height: 30
+            },
+            reaperAttackRight:{
+                imageSrc: '/dungeondiversprites/entities/reaper/reaperAttackRight.png',
+                framesMax: 10,
+                framesHold: 15,
+                offset: {x: 14, y: 10},
+                width: 20,
+                height: 30
+            },
+            reaperHolsterWeaponLeft:{
+                imageSrc: '/dungeondiversprites/entities/reaper/reaperHolsterWeaponLeft.png',
+                framesMax: 10,
+                framesHold: 10,
+                offset: {x: 16, y:10},
+                width: 20,
+                height: 30
+            },
+            reaperHolsterWeaponRight:{
+                imageSrc: '/dungeondiversprites/entities/reaper/reaperHolsterWeaponRight.png',
+                framesMax: 10,
+                framesHold: 10,
+                offset: {x: 14, y:10},
+                width: 20,
+                height: 30
+            },
+    }
+})
+
+const mobCollision = (mobOne, mobTwo)=>{    
+    const left = mobOne.position.x + mobOne.width >=  mobTwo.position.x
+    const right = mobOne.position.x <= mobTwo.position.x + mobTwo.width
+    const top = mobOne.position.y + mobOne.height >= mobTwo.position.y
+    const bottom = mobOne.position.y <= mobTwo.position.y + mobTwo.height
+
+
+    if(left && right && top && bottom && mobOne.alive && mobTwo.alive && !mobOne.dying && !mobTwo.dying && !mobOne.hurt){
+            mobTwo.waiting = true
+    } else {
+            mobTwo.waiting = false
+    }
+
+
+}
+
+
+const houndAttack = (player, enemy)=>{
+    enemy.damage = 2
+
+    if(enemy.dying){
+        if(enemy.direction == 'left'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.houndDeathLeft.framesMax
+            enemy.width = enemy.sprites.houndDeathLeft.width
+            enemy.height = enemy.sprites.houndDeathLeft.height
+            enemy.image = enemy.sprites.houndDeathLeft.image 
+            enemy.offset.x = enemy.sprites.houndDeathLeft.offset.x
+            enemy.offset.y = enemy.sprites.houndDeathLeft.offset.y
+        } if(enemy.direction == 'right'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.houndDeathRight.framesMax
+            enemy.width = enemy.sprites.houndDeathRight.width
+            enemy.height = enemy.sprites.houndDeathRight.height
+            enemy.image = enemy.sprites.houndDeathRight.image 
+            enemy.offset.x = enemy.sprites.houndDeathRight.offset.x
+            enemy.offset.y = enemy.sprites.houndDeathRight.offset.y
+        }
+    } else if(enemy.hurt && !enemy.dying){
+        if(enemy.direction == 'left'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.houndHurtLeft.framesMax
+            enemy.width = enemy.sprites.houndHurtLeft.width
+            enemy.height = enemy.sprites.houndHurtLeft.height
+            enemy.image = enemy.sprites.houndHurtLeft.image 
+            enemy.offset.x = enemy.sprites.houndHurtLeft.offset.x
+            enemy.offset.y = enemy.sprites.houndHurtLeft.offset.y
+        } if(enemy.direction == 'right'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.houndHurtRight.framesMax
+            enemy.width = enemy.sprites.houndHurtRight.width
+            enemy.height = enemy.sprites.houndHurtRight.height
+            enemy.image = enemy.sprites.houndHurtRight.image 
+            enemy.offset.x = enemy.sprites.houndHurtRight.offset.x
+            enemy.offset.y = enemy.sprites.houndHurtRight.offset.y
+        }
+    } else if (!enemy.hurt && !enemy.dying && enemy.alive && !enemy.waiting){
+        if(enemy.position.x <= player.position.x + player.width + 45 && enemy.position.x >= player.position.x + player.width && !player.dying && !enemy.dying){
+            setTimeout(()=>{enemy.position.x -= 2; enemy.position.y += 0 }, 1000)
+            enemy.image = enemy.sprites.houndAttackLeft.image
+            enemy.framesMax = enemy.sprites.houndAttackLeft.framesMax
+            enemy.offset.x = enemy.sprites.houndAttackLeft.offset.x
+            enemy.offset.y = enemy.sprites.houndAttackLeft.offset.y
+            
+        } else if(enemy.position.x + enemy.width  >= player.position.x - 45 && enemy.position.x + enemy.width <= player.position.x && !enemy.dying && !player.dying) {
+            setTimeout(()=>{enemy.position.x += 2; enemy.position.y += 0}, 1000)
+            enemy.image = enemy.sprites.houndAttackRight.image
+            enemy.framesMax = enemy.sprites.houndAttackRight.framesMax
+            enemy.offset.x = enemy.sprites.houndAttackRight.offset.x
+            enemy.offset.y = enemy.sprites.houndAttackRight.offset.y
+        } else{
+          if(enemy.position.x >= player.position.x + player.width + 35){
+           
+            enemy.position.x -= .5
+            enemy.direction = 'left'
+            enemy.width = enemy.sprites.houndLeft.width
+            enemy.height = enemy.sprites.houndLeft.height
+            enemy.image = enemy.sprites.houndLeft.image
+            enemy.framesMax = enemy.sprites.houndLeft.framesMax
+            enemy.offset.x = enemy.sprites.houndLeft.offset.x
+            enemy.offset.y = enemy.sprites.houndLeft.offset.y
+        }
+        if(enemy.position.x + enemy.width <= player.position.x - 35){
+            enemy.position.x += .5
+            enemy.direction = 'right'
+            enemy.width = enemy.sprites.houndRight.width
+            enemy.height = enemy.sprites.houndRight.height
+            enemy.image = enemy.sprites.houndRight.image
+            enemy.framesMax = enemy.sprites.houndRight.framesMax
+            enemy.offset.x = enemy.sprites.houndRight.offset.x
+            enemy.offset.y = enemy.sprites.houndRight.offset.y
+        }
+        if(enemy.position.y >= player.position.y + 20){
+            enemy.position.y -= .5
+        }
+        if(enemy.position.y <= player.position.y + 20){
+            enemy.position.y += .5
+        }
+    }
+  }
+}
+
+let intermission = false
+const reaperBlink=()=>{
+    if(!intermission && reaper.alive){
+        console.log('working')
+        setInterval(()=>{
+            console.log('still working')
+            setTimeout(()=>{
+                reaper.framesCurrent = 0
+                reaper.attacking = true
+                reaper.position.x = playerModel.position.x - 22
+                reaper.position.y = playerModel.position.y + 20
+            }, 5000)
+            setTimeout(()=>{
+                reaper.damage = 6
+                reaper.width = 40
+            }, 5400)
+            setTimeout(()=>{
+                reaper.damage = 3
+                reaper.width = 20
+            }, 5600)
+            setTimeout(()=>{
+                reaper.attacking = false
+                reaper.framesCurrent = 0
+            }, 6000)
+        }, 7000)
+    }
+}
+
+
+const reaperAttack = (player, enemy)=>{
+
+    enemy.scale = 1
+    if(enemy.attacking){
+        enemy.direction = 'right'
+        enemy.position.x -= 0
+        enemy.framesMax = enemy.sprites.reaperAttackRight.framesMax
+        enemy.height = enemy.sprites.reaperAttackRight.height
+        enemy.image = enemy.sprites.reaperAttackRight.image 
+        enemy.offset.x = enemy.sprites.reaperAttackRight.offset.x
+        enemy.offset.y = enemy.sprites.reaperAttackRight.offset.y
+    } else if(intermission){
+        enemy.position.x = 330
+        enemy.position.y = 240
+        enemy.framesMax = enemy.sprites.reaperIdle.framesMax
+        enemy.width = enemy.sprites.reaperIdle.width
+        enemy.height = enemy.sprites.reaperIdle.height
+        enemy.image = enemy.sprites.reaperIdle.image 
+        enemy.offset.x = enemy.sprites.reaperIdle.offset.x
+        enemy.offset.y = enemy.sprites.reaperIdle.offset.y
+    } else if(enemy.dying){
+        if(enemy.direction === 'left'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.reaperHolsterWeaponLeft.framesMax
+            enemy.width = enemy.sprites.reaperHolsterWeaponLeft.width
+            enemy.height = enemy.sprites.reaperHolsterWeaponLeft.height
+            enemy.image = enemy.sprites.reaperHolsterWeaponLeft.image 
+            enemy.offset.x = enemy.sprites.reaperHolsterWeaponLeft.offset.x
+            enemy.offset.y = enemy.sprites.reaperHolsterWeaponLeft.offset.y
+        } if(enemy.direction === 'right'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.reaperHolsterWeaponRight.framesMax
+            enemy.width = enemy.sprites.reaperHolsterWeaponRight.width
+            enemy.height = enemy.sprites.reaperHolsterWeaponRight.height
+            enemy.image = enemy.sprites.reaperHolsterWeaponRight.image 
+            enemy.offset.x = enemy.sprites.reaperHolsterWeaponRight.offset.x
+            enemy.offset.y = enemy.sprites.reaperHolsterWeaponRight.offset.y
+        }
+    } else if(enemy.hurt && !enemy.dying){
+        if(enemy.direction === 'left'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.reaperIdleLeft.framesMax
+            enemy.width = enemy.sprites.reaperIdleLeft.width
+            enemy.height = enemy.sprites.reaperIdleLeft.height
+            enemy.image = enemy.sprites.reaperIdleLeft.image 
+            enemy.offset.x = enemy.sprites.reaperIdleLeft.offset.x
+            enemy.offset.y = enemy.sprites.reaperIdleLeft.offset.y
+        } if(enemy.direction === 'right'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.reaperIdle.framesMax
+            enemy.width = enemy.sprites.reaperIdle.width
+            enemy.height = enemy.sprites.reaperIdle.height
+            enemy.image = enemy.sprites.reaperIdle.image 
+            enemy.offset.x = enemy.sprites.reaperIdle.offset.x
+            enemy.offset.y = enemy.sprites.reaperIdle.offset.y
+        }
+    } else if (!enemy.hurt && !enemy.dying && enemy.alive && !enemy.waiting &&  !enemy.attacking && !intermission){
+        if(enemy.position.x >= player.position.x){
+            enemy.direction = 'left'
+            enemy.position.x -= 1
+            enemy.width = enemy.sprites.reaperLeft.width
+            enemy.height = enemy.sprites.reaperLeft.height
+            enemy.image = enemy.sprites.reaperLeft.image
+            enemy.framesMax = enemy.sprites.reaperLeft.framesMax
+            enemy.offset.x = enemy.sprites.reaperLeft.offset.x
+            enemy.offset.y = enemy.sprites.reaperLeft.offset.y
+        }
+        if(enemy.position.x <= player.position.x){
+            enemy.direction = 'right'
+            enemy.position.x += 1
+            enemy.width = enemy.sprites.reaperRight.width
+            enemy.height = enemy.sprites.reaperRight.height
+            enemy.image = enemy.sprites.reaperRight.image
+            enemy.framesMax = enemy.sprites.reaperRight.framesMax
+            enemy.offset.x = enemy.sprites.reaperRight.offset.x
+            enemy.offset.y = enemy.sprites.reaperRight.offset.y           
+        }
+        if(enemy.position.y >= player.position.y + 20){
+            enemy.position.y -= 1
+        }
+        if(enemy.position.y <= player.position.y + 20){
+            enemy.position.y += 1
+        }
+      }
+}
+
+const goblinAttack = (player, enemy)=>{
+    enemy.damage = 4
+    if(enemy.dying){
+        if(enemy.direction === 'left'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.goblinDeathLeft.framesMax
+            enemy.width = enemy.sprites.goblinDeathLeft.width
+            enemy.height = enemy.sprites.goblinDeathLeft.height
+            enemy.image = enemy.sprites.goblinDeathLeft.image 
+            enemy.offset.x = enemy.sprites.goblinDeathLeft.offset.x
+            enemy.offset.y = enemy.sprites.goblinDeathLeft.offset.y
+        } if(enemy.direction == 'right'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.goblinDeathRight.framesMax
+            enemy.width = enemy.sprites.goblinDeathRight.width
+            enemy.height = enemy.sprites.goblinDeathRight.height
+            enemy.image = enemy.sprites.goblinDeathRight.image 
+            enemy.offset.x = enemy.sprites.goblinDeathRight.offset.x
+            enemy.offset.y = enemy.sprites.goblinDeathRight.offset.y
+        }
+    } else if(enemy.hurt && !enemy.dying){
+        if(enemy.direction === 'left'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.goblinHurtLeft.framesMax
+            enemy.width = enemy.sprites.goblinHurtLeft.width
+            enemy.height = enemy.sprites.goblinHurtLeft.height
+            enemy.image = enemy.sprites.goblinHurtLeft.image 
+            enemy.offset.x = enemy.sprites.goblinHurtLeft.offset.x
+            enemy.offset.y = enemy.sprites.goblinHurtLeft.offset.y
+        } if(enemy.direction === 'right'){
+            enemy.position.x -= 0
+            enemy.framesMax = enemy.sprites.goblinHurtRight.framesMax
+            enemy.width = enemy.sprites.goblinHurtRight.width
+            enemy.height = enemy.sprites.goblinHurtRight.height
+            enemy.image = enemy.sprites.goblinHurtRight.image 
+            enemy.offset.x = enemy.sprites.goblinHurtRight.offset.x
+            enemy.offset.y = enemy.sprites.goblinHurtRight.offset.y
+        }
+    } else if (!enemy.hurt && !enemy.dying && enemy.alive && !enemy.waiting){
+        if(enemy.position.x >= player.position.x && !enemy.waiting){
+            enemy.direction = 'left'
+            enemy.position.x -= .6
+            enemy.width = enemy.sprites.goblinLeft.width
+            enemy.height = enemy.sprites.goblinLeft.height
+            enemy.image = enemy.sprites.goblinLeft.image
+            enemy.framesMax = enemy.sprites.goblinLeft.framesMax
+            enemy.offset.x = enemy.sprites.goblinLeft.offset.x
+            enemy.offset.y = enemy.sprites.goblinLeft.offset.y
+        }
+        if(enemy.position.x <= player.position.x && !enemy.waiting){
+            enemy.direction = 'right'
+            enemy.position.x += .6
+            enemy.width = enemy.sprites.goblinRight.width
+            enemy.height = enemy.sprites.goblinRight.height
+            enemy.image = enemy.sprites.goblinRight.image
+            enemy.framesMax = enemy.sprites.goblinRight.framesMax
+            enemy.offset.x = enemy.sprites.goblinRight.offset.x
+            enemy.offset.y = enemy.sprites.goblinRight.offset.y           
+        }
+        if(enemy.position.y >= player.position.y + 15 && !enemy.waiting){
+            enemy.position.y -= .6
+        }
+        if(enemy.position.y <= player.position.y + 15 && !enemy.waiting){
+            enemy.position.y += .6
+        }
+      }
+}
+
+
+const levelOne = (ctx)=>{
+    
+    if(enemyA.alive){
+        goblinAttack(playerModel, enemyA)
+        enemyA.update(ctx)
+    }
+   
+    if(enemyB.alive){
+        goblinAttack(playerModel, enemyB)
+        enemyB.update(ctx)
+    }
+    if(enemyC.alive){
+        goblinAttack(playerModel, enemyC)
+        enemyC.update(ctx)
+    }
+    if(enemyD.alive){
+        goblinAttack(playerModel, enemyD)
+        enemyD.update(ctx)
+    }
+    door.update(ctx)
+
+    if(enemyA.alive === false && enemyB.alive === false && enemyC.alive === false && enemyD.alive === false){
+        level = 2
+        
+        spikeA.alive = true
+        enemyA.alive = true
+        enemyB.alive = true
+        enemyC.alive = true
+        enemyD.alive = true
+        enemyA.health = 4
+        enemyB.health = 4
+        enemyC.health = 4
+        enemyD.health = 4
+        enemyA.position.x = 40
+        enemyA.position.y = 70
+        enemyB.position.x = 630
+        enemyB.position.y = 70
+        enemyC.position.x = 40
+        enemyC.position.y = 400
+        enemyD.position.x = 630
+        enemyD.position.y = 400
+    }
+}
+
+const levelTwo = (ctx) =>{
+    if(enemyA.alive){
+        houndAttack(playerModel, enemyA)
+        enemyA.update(ctx)
+    }
+   
+    if(enemyB.alive){
+        houndAttack(playerModel, enemyB)
+        enemyB.update(ctx)
+    }
+    if(enemyC.alive){
+        houndAttack(playerModel, enemyC)
+        enemyC.update(ctx)
+    }
+    if(enemyD.alive){
+        houndAttack(playerModel, enemyD)
+        enemyD.update(ctx)
+    }
+
+
+    if(spikeA.alive){
+        spikeA.update(ctx)
+    }
+    door.update(ctx)
+
+    if(enemyA.alive === false && enemyB.alive === false && enemyC.alive === false && enemyD.alive === false){
+        level = 3
+        
+    }
+}
+let roomOver = false
+const levelThree = (ctx) =>{
+    if(spikeA.alive){
+        spikeA.update(ctx)
+    }
+    door.update(ctx)
+}
+const levelFour = (ctx) =>{
+  if(survivorRoomOne.notSafe){
+        survivorRoomOne.update(ctx)
+    }
+    chest.update(ctx)
+    door.update(ctx)
+    if(spikeB.alive){
+        spikeB.update(ctx)
+    }
+    if(level === 4 && survivorRoomOne.notSafe === false){
+        dialogue = true
+        // message.classList.remove('hidden')
+        // message.innerText = 'Oh my gosh, thank you so much for coming to save me. Here is one gold as a token of my appreciation. Good luck getting that chest full of gold open!'
+        // continueButton.classList.remove('hidden')
+        // continueButton.innerText = `Press 'Enter' to Continue`
+        
+        window.addEventListener('keydown', (e)=>{if(e.key === 'Enter' && level === 4){
+            dialogue = false
+            // message.classList.add('hidden')
+            // continueButton.classList.add('hidden')
+                        
+            level = 5
+            reaper.position.x = 100
+            reaper.position.y = 240
+            intermission = false
+            reaper.alive = true
+            reaperBlink()
+            enemyA.alive = false
+            enemyB.alive = false
+            enemyC.alive = false
+            enemyD.alive = false
+            reaper.health = 20
+        }})
+      
+    }
+}
+const levelFive = (ctx) =>{
+    if(reaper.alive){
+        reaperAttack(playerModel, reaper)
+        reaper.update(ctx)
+    }
+    chest.update(ctx)
+    door.update(ctx)
+    if(spikeB.alive){
+        spikeB.update(ctx)
+    }
+
+    if(reaper.health <= 8){
+        level = 6
+        intermission = true
+        spikeC.alive = true
+        enemyA.alive = true
+        enemyB.alive = true
+        enemyC.alive = true
+        enemyD.alive = true
+        enemyA.health = 4
+        enemyB.health = 4
+        enemyC.health = 4
+        enemyD.health = 4
+        enemyA.position.x = 40
+        enemyA.position.y = 70
+        enemyB.position.x = 630
+        enemyB.position.y = 70
+        enemyC.position.x = 40
+        enemyC.position.y = 400
+        enemyD.position.x = 630
+        enemyD.position.y = 400
+    }
+
+}
+const levelSix = (ctx) =>{
+
+    if(reaper.alive){
+        reaperAttack(playerModel, reaper)
+        reaper.update(ctx)
+    }
+    if(enemyA.alive){
+        houndAttack(playerModel, enemyA)
+        enemyA.update(ctx)
+    }
+    if(enemyB.alive){
+        houndAttack(playerModel, enemyB)
+        enemyB.update(ctx)
+    }
+    if(enemyC.alive){
+        houndAttack(playerModel, enemyC)
+        enemyC.update(ctx)
+    }
+    if(enemyD.alive){
+        houndAttack(playerModel,enemyD)
+        enemyD.update(ctx)
+    }
+    chest.update(ctx)
+    door.update(ctx)
+    if(spikeB.alive){
+        spikeB.update(ctx)
+    }
+    if(spikeC.alive){
+        spikeC.update(ctx)
+    }
+   
+
+    if(enemyA.alive === false && enemyB.alive === false && enemyC.alive === false && enemyD.alive === false){
+        
+        level = 7
+        intermission = false
+        enemyA.alive = true
+        enemyB.alive = true
+        enemyC.alive = true
+        enemyD.alive = true
+        enemyA.health = 5
+        enemyB.health = 5
+        enemyC.health = 5
+        enemyD.health = 5
+        enemyA.position.x = 40
+        enemyA.position.y = 70
+        enemyB.position.x = 630
+        enemyB.position.y = 70
+        enemyC.position.x = 630
+        enemyC.position.y = 400
+        enemyD.position.x = 40
+        enemyD.position.y = 400
+
+    }
+}
+const levelSeven = (ctx) =>{
+
+    if(reaper.alive){
+        reaperAttack(playerModel, reaper)
+        reaper.update(ctx)
+    }
+    if(enemyA.alive){
+        goblinAttack(playerModel, enemyA)
+        enemyA.update(ctx)
+    }
+    if(enemyB.alive){
+        goblinAttack(playerModel, enemyB)
+        enemyB.update(ctx)
+    }
+    if(enemyC.alive){
+        goblinAttack(playerModel, enemyC)
+        enemyC.update(ctx)
+    }
+    if(enemyD.alive){
+        goblinAttack(playerModel,enemyD)
+        enemyD.update(ctx)
+    }
+    chest.update(ctx)
+    door.update(ctx)
+    if(spikeB.alive){
+        spikeB.update(ctx)
+    }
+    if(spikeC.alive){
+        spikeC.update(ctx)
+    }
+    if(reaper.alive === false && enemyA.alive === false && enemyB.alive === false && enemyC.alive === false && enemyD.alive === false){
+        
+        level = 8
+        bossDead = true
+        key.alive = true
+        chest.alive = true
+    }
+}
+const levelEight = (ctx)=>{
+    chest.update(ctx)
+    door.update(ctx)
+    if(key.alive){
+        key.update(ctx)
+    }
+    if(chest.alive === false){
+        dialogue = true
+        // message.classList.remove('hidden')
+        // message.innerText = '...it\'s empty...'
+        // continueButton.classList.remove('hidden')
+        // continueButton.innerText = `Press 'k' to Continue`
+        window.addEventListener('keydown', (e)=>{if(e.key === 'Enter'){
+            dialogue = false
+            // message.classList.add('hidden')
+            // continueButton.classList.add('hidden')
+            
+            level = 9
+            enemyA.alive = false
+            enemyB.alive = false
+            enemyC.alive = false
+            enemyD.alive = false
+            reaper.alive = false
+
+
+        }})
+    }
+}
+const levelNine = (ctx)=>{
+    // message.classList.add('hidden')
+    // continueButton.classList.add('hidden')
+    chest.image = chest.sprites.open.image
+    chest.offset.x = 55
+    chest.offset.y = 60
+    chest.update(ctx)
+    door.update(ctx)
+    
+}
+const gameState=(ctx)=>{
+    if(!gameStart && level === 1){
+        window.addEventListener('keydown', (e)=>{
+            if(e.key === 'Enter' && level === 1){
+                // message.classList.add('hidden')
+                // continueButton.classList.add('hidden')
+                gameStart = true
+                playerModel.alive = true
+                enemyA.alive = true
+                enemyB.alive = true
+                enemyC.alive = true
+                enemyD.alive = true
+            }
+        })
+    }
+    if(gameLost){
+        // message.innerText = 'Looks like you weren\'t strong enough this time, try again?'
+        // message.classList.remove('hidden')
+        // message.style.backgroundColor = 'red'
+        // continueButton.classList.remove('hidden')
+        // continueButton.innerText = `Press 'Enter' to Retry?`
+        window.addEventListener('keydown', (e)=>{
+            if(e.key === 'Enter' && gameLost === true){
+
+                level = 1
+                enemyA.alive = true
+                enemyB.alive = true
+                enemyC.alive = true
+                enemyD.alive = true
+                reaper.position.x = 100
+                reaper.position.y = 240
+                reaper.alive = false
+                reaper.health = 20
+                enemyA.health = 5
+                enemyB.health = 5
+                enemyC.health = 5
+                enemyD.health = 5
+                enemyA.position.x = 650
+                enemyA.position.y = 400
+                enemyB.position.x = 410
+                enemyB.position.y = 300
+                enemyC.position.x = 400
+                enemyC.position.y = 400
+                enemyD.position.x = 500
+                enemyD.position.y = 100
+                dying = false
+                moved = false
+                playerModel.alive = true
+                playerModel.position.x = 50
+                playerModel.position.y = 70
+                playerModel.health = 20
+                spikeCount = 5
+                                
+                // message.classList.add('hidden')
+                // continueButton.classList.add('hidden')
+                door.image = door.sprites.door.image
+                door.scale = 1
+                door.position.x = 666
+                door.position.y = 200
+                door.offset.x = door.sprites.door.offset.x
+                door.offset.y = door.sprites.door.offset.y
+                gameLost = false
+            }})
+    }
+    if(gameStart){
+        if(level === 1){
+            // objective.innerText = 'Slay all the goblins!'
+            levelOne(ctx)
+        } else if (level === 2){
+            // objective.innerText = 'Careful, hounds!'
+            levelTwo(ctx)
+        } else if (level === 3){
+            // objective.innerText = 'Go find Bebo!'
+            levelThree(ctx)
+        } else if (level === 4){
+            // objective.innerText = 'Oh, there he is.'
+            levelFour(ctx)
+        } else if (level === 5){
+            // objective.innerText = 'What\'s that????'
+            levelFive(ctx)
+        } else if (level === 6){
+            // objective.innerText = 'More hounds?!?!'
+            levelSix(ctx)
+        } else if (level === 7){
+            // objective.innerText = 'Don\'t die...'
+            levelSeven(ctx)
+        } else if (level === 8){
+            // objective.innerText = 'Collect your prize.'
+            levelEight(ctx)
+        } else if(level === 9){
+            levelNine(ctx)
+            // objective.innerText = 'Leave dissappointed'
+        }
+    }  
+    if(gameWon){
+        
+        // message.innerText = 'Well, you saved Bebo... but you only came out with 1 measely gold. But hey, that\'s 1 more gold than before. Take an extra point on the house!'
+        // message.classList.remove('hidden')
+        // message.style.backgroundColor = 'skyblue'
+        // continueButton.classList.remove('hidden')
+        // continueButton.innerText = `Press 'Enter' to Retry?`
+        window.addEventListener('keydown', (e)=>{
+            if(e.key === 'Enter' && gameWon === true){
+                level = 1
+                enemyA.alive = true
+                enemyB.alive = true
+                enemyC.alive = true
+                enemyD.alive = true
+                reaper.alive = false
+                reaper.health = 20
+                enemyA.health = 5
+                enemyB.health = 5
+                enemyC.health = 5
+                enemyD.health = 5
+                enemyA.position.x = 650
+                enemyA.position.y = 400
+                enemyB.position.x = 410
+                enemyB.position.y = 300
+                enemyC.position.x = 400
+                enemyC.position.y = 400
+                enemyD.position.x = 500
+                enemyD.position.y = 100
+                playerModel.alive = true
+                dying = false
+                moved = false
+                playerModel.position.x = 50
+                playerModel.position.y = 70
+                playerModel.health = 20
+                spikeCount = 5
+                                  
+                // message.classList.add('hidden')
+                // continueButton.classList.add('hidden')
+                door.image = door.sprites.door.image
+                door.scale = 1
+                door.position.x = 666
+                door.position.y = 200
+                door.offset.x = door.sprites.door.offset.x
+                door.offset.y = door.sprites.door.offset.y
+                gameWon = false
+            }})
+    }
+
+}
+
 const lastKeyPressed = ()=>{
     if(!attacking){
     if(keys.a.pressed){
