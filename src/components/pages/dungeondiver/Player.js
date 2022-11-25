@@ -1,5 +1,7 @@
 export function PlayerMovement(ctx){
+    
     movementFrames()
+    idleDirection()
     diveTimer(ctx)
     playerModel.update(ctx)
 
@@ -68,6 +70,12 @@ class Player {
         if(this.position.x < 30){
             this.speed.x = 0
             this.position.x = 30
+        } else if((this.position.x + this.speed.x)  < 30 ){
+            this.speed.x = 0
+            this.position.x = 30
+        }else if((this.position.x + this.width) + this.speed.x > 670 ){
+            this.speed.x = 0
+            this.position.x = 670 - this.width
         } else if(this.position.x + this.width > 670){
             this.speed.x = 0
             this.position.x = 670 - this.width
@@ -78,9 +86,15 @@ class Player {
         if(this.position.y < 60){
             this.speed.y = 0
             this.position.y = 60
-        } else if (this.position.y  + this.height > 450){
+        } else if (this.position.y  + this.speed.y < 60){
             this.speed.y = 0
-            this.position.y = 450 - this.height    
+            this.position.y = 60    
+        } else if (this.position.y  + this.height + this.speed.y > 460){
+            this.speed.y = 0
+            this.position.y = 460 - this.height    
+        } else if (this.position.y  + this.height > 460){
+            this.speed.y = 0
+            this.position.y = 460 - this.height    
         } else {
             this.position.y += this.speed.y
         }
@@ -245,6 +259,7 @@ let runFramesHold = 7
 
 let idleframesElaped = 0
 let idleCurrentFrame = 0
+let idlePrevFrame = 0
 let idleframesMax = 5
 let idleframesHold = 10
 const movementFrames = ()=>{
@@ -277,7 +292,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runUp.offset.x
                 playerModel.offset.y = playerModel.sprites.runUp.offset.y
-                // playerModel.image.src = `./images/playerModel/runUp/golem-run-t-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runUp/golem-run-t-0${runCurrentFrame}.png`
                 }
             } else if (keys.s.pressed && keys.a.pressed && keys.d.pressed){
                 playerModel.speed.x = 0
@@ -287,7 +302,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runDown.offset.x
                 playerModel.offset.y = playerModel.sprites.runDown.offset.y
-                // playerModel.image.src = `./images/playerModel/runDown/golem-run-d-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runDown/golem-run-d-0${runCurrentFrame}.png`
                 }
             } else if (keys.d.pressed && keys.w.pressed && keys.s.pressed){
                 playerModel.speed.x = 3
@@ -297,7 +312,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runRight.offset.x
                 playerModel.offset.y = playerModel.sprites.runRight.offset.y
-                // playerModel.image.src = `./images/playerModel/runRight/golem-run-r-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runRight/golem-run-r-0${runCurrentFrame}.png`
                 }
             } else if (keys.a.pressed && keys.s.pressed && keys.w.pressed) {
                 playerModel.speed.x = -3
@@ -307,7 +322,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runLeft.offset.x
                 playerModel.offset.y = playerModel.sprites.runLeft.offset.y
-                // playerModel.image.src = `./images/playerModel/runLeft/golem-run-l-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runLeft/golem-run-l-0${runCurrentFrame}.png`
                 }
             } else if(keys.d.pressed && keys.s.pressed){
                 playerModel.speed.x = 3
@@ -317,7 +332,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runRight.offset.x
                 playerModel.offset.y = playerModel.sprites.runRight.offset.y
-                // playerModel.image.src = `./images/playerModel/runRight/golem-run-r-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runRight/golem-run-r-0${runCurrentFrame}.png`
                 }
             }  else if(keys.a.pressed && keys.s.pressed){
                 playerModel.speed.x = -3
@@ -327,7 +342,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runUp.offset.x
                 playerModel.offset.y = playerModel.sprites.runUp.offset.y
-                // playerModel.image.src =  `./images/playerModel/runLeft/golem-run-l-0${runCurrentFrame}.png`
+                playerModel.image.src =  `/dungeondiversprites/adventurer/runLeft/golem-run-l-0${runCurrentFrame}.png`
                 }
             }  else if(keys.d.pressed && keys.w.pressed){
                 playerModel.speed.x = 3
@@ -337,7 +352,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runRight.offset.x
                 playerModel.offset.y = playerModel.sprites.runRight.offset.y
-                // playerModel.image.src = `./images/playerModel/runRight/golem-run-r-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runRight/golem-run-r-0${runCurrentFrame}.png`
                 }
             }  else if(keys.a.pressed && keys.w.pressed){
                 playerModel.speed.x = -3
@@ -347,7 +362,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runLeft.offset.x
                 playerModel.offset.y = playerModel.sprites.runLeft.offset.y
-                // playerModel.image.src =  `./images/playerModel/runLeft/golem-run-l-0${runCurrentFrame}.png`
+                playerModel.image.src =  `/dungeondiversprites/adventurer/runLeft/golem-run-l-0${runCurrentFrame}.png`
                 }
             }   else if(keys.a.pressed && keys.d.pressed){
                 playerModel.speed.x = 0
@@ -357,7 +372,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.idleDown.offset.x
                 playerModel.offset.y = playerModel.sprites.idleDown.offset.y
-                // playerModel.image.src =  `./images/playerModel/idleDown/golem-idle-d-0${idleCurrentFrame}.png`
+                playerModel.image.src =  `/dungeondiversprites/adventurer/idleDown/golem-idle-d-0${idleCurrentFrame}.png`
                 }
             }  else if(keys.w.pressed && keys.s.pressed){
                 playerModel.speed.x = 0
@@ -367,7 +382,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.idleDown.offset.x
                 playerModel.offset.y = playerModel.sprites.idleDown.offset.y
-                // playerModel.image.src = `./images/playerModel/idleDown/golem-idle-d-0${idleCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/idleDown/golem-idle-d-0${idleCurrentFrame}.png`
                 }
             } else if(keys.w.pressed){
                 playerModel.speed.y = -3
@@ -376,7 +391,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runUp.offset.x
                 playerModel.offset.y = playerModel.sprites.runUp.offset.y
-                // playerModel.image.src = `./images/playerModel/runUp/golem-run-t-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runUp/golem-run-t-0${runCurrentFrame}.png`
                 }
             } else if(keys.a.pressed){
                 playerModel.speed.x = -3
@@ -385,7 +400,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runLeft.offset.x
                 playerModel.offset.y = playerModel.sprites.runLeft.offset.y
-                // playerModel.image.src =  `./images/playerModel/runLeft/golem-run-l-0${runCurrentFrame}.png`
+                playerModel.image.src =  `/dungeondiversprites/adventurer/runLeft/golem-run-l-0${runCurrentFrame}.png`
                 }
             } else if(keys.s.pressed){
                 playerModel.speed.y = 3
@@ -394,7 +409,7 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runDown.offset.x
                 playerModel.offset.y = playerModel.sprites.runDown.offset.y
-                // playerModel.image.src = `./images/playerModel/runDown/golem-run-d-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runDown/golem-run-d-0${runCurrentFrame}.png`
                 }
             } else if(keys.d.pressed){
                 playerModel.speed.x = 3
@@ -403,12 +418,53 @@ const movementFrames = ()=>{
                 if(!swimming){
                 playerModel.offset.x = playerModel.sprites.runRight.offset.x
                 playerModel.offset.y = playerModel.sprites.runRight.offset.y
-                // playerModel.image.src = `./images/playerModel/runRight/golem-run-r-0${runCurrentFrame}.png`
+                playerModel.image.src = `/dungeondiversprites/adventurer/runRight/golem-run-r-0${runCurrentFrame}.png`
                 }
             }    else {
                 moving = false  
             }
         }
+}
+const idleDirection = () => {
+    if(!moving && !attacking && !swimming && !dying && !hurt){
+        idleframesElaped++
+        if(idleframesElaped % idleframesHold === 0){  
+            if(idleCurrentFrame < idleframesMax - 1){
+                idlePrevFrame = idleCurrentFrame
+                idleCurrentFrame++
+            
+            } else {
+                idleCurrentFrame = 0
+            }
+    }
+
+        if(lastKey === 'w'){
+            playerModel.width = playerModel.sprites.runUp.width
+            playerModel.height = playerModel.sprites.runUp.height
+            playerModel.offset.x = playerModel.sprites.idleUp.offset.x
+            playerModel.offset.y = playerModel.sprites.idleUp.offset.y
+            playerModel.image.src =  `/dungeondiversprites/adventurer/idleUp/golem-idle-t-0${idleCurrentFrame}.png`
+        } else if(lastKey === 'a'){    
+            playerModel.width = playerModel.sprites.runUp.width
+            playerModel.height = playerModel.sprites.runUp.height
+            playerModel.offset.x = playerModel.sprites.idleLeft.offset.x
+            playerModel.offset.y = playerModel.sprites.idleLeft.offset.y
+            playerModel.image.src =  `/dungeondiversprites/adventurer/idleLeft/golem-idle-l-0${idleCurrentFrame}.png`
+        } else if(lastKey === 's'|| !moved){   
+            playerModel.width = playerModel.sprites.runUp.width
+            playerModel.height = playerModel.sprites.runUp.height
+            playerModel.offset.x = playerModel.sprites.idleDown.offset.x
+            playerModel.offset.y = playerModel.sprites.idleDown.offset.y
+            // console.log(idleCurrentFrame)
+            playerModel.image.src =  `/dungeondiversprites/adventurer/idleDown/golem-idle-d-0${idleCurrentFrame}.png`
+        } else if(lastKey === 'd'){    
+            playerModel.width = playerModel.sprites.runUp.width
+            playerModel.height = playerModel.sprites.runUp.height
+            playerModel.offset.x = playerModel.sprites.idleRight.offset.x
+            playerModel.offset.y = playerModel.sprites.idleRight.offset.y
+            playerModel.image.src =  `/dungeondiversprites/adventurer/idleRight/golem-idle-r-0${idleCurrentFrame}.png`
+        }
+    }
 }
 let swimming = false
 let swimFramesElaped = 0
@@ -478,7 +534,7 @@ const swimFrames = () =>{
         playerModel.height = playerModel.sprites.swimLeft.height
         playerModel.offset.x = playerModel.sprites.swimUnD.offset.x
         playerModel.offset.y = playerModel.sprites.swimUnD.offset.y
-        // playerModel.image.src = `./images/playerModel/swim/swimD/golem-swim-d-0${swimCurrentFrame}.png`
+        playerModel.image.src = `/dungeondiversprites/playerModel/swim/swimD/golem-swim-d-0${swimCurrentFrame}.png`
     } else if (keys.d.pressed ||  lastKey === 'd'){
         playerModel.width = playerModel.sprites.swimRight.width
         playerModel.height = playerModel.sprites.swimRight.height

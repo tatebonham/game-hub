@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+import { GameBorders } from "./GameBorders";
 import { PlayerMovement } from "./Player";
 
 export default function DungeonDiverBoard(){
@@ -11,6 +12,7 @@ export default function DungeonDiverBoard(){
             
             ctx.fillStyle = 'gray'
             ctx.fillRect(0, 0, canvas.width, canvas.height)
+            GameBorders(ctx)
             
 
             PlayerMovement(ctx)
@@ -20,7 +22,9 @@ export default function DungeonDiverBoard(){
         }
         render()
     }, [])
+    
+
     return(
-        <canvas id="canvas" ref={canvasRef}  height={520} width={700} />
+            <canvas id="canvas" ref={canvasRef}  height={520} width={700} /> 
     )
 }
